@@ -73,6 +73,15 @@
   @keyframes floatUp { 0% {transform: translateY(0) scale(1);} 50% {transform: translateY(-50vh) scale(1.1);} 100% {transform: translateY(-110vh) scale(1);} }
 
   @keyframes shake { 0%{transform:translateX(0);} 25%{transform:translateX(-4px);} 50%{transform:translateX(4px);} 75%{transform:translateX(-4px);} 100%{transform:translateX(0);} }
+
+  /* Mobile Play Overlay */
+  #playOverlay {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.5); color: #fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem; z-index:10;
+    cursor:pointer;
+  }
 </style>
 </head>
 <body>
@@ -94,7 +103,11 @@
 <img src="birthday11.jpg" class="floating-img"> 
 <img src="birthday12.jpg" class="floating-img">
 
-<audio id="music" src="birthday.mp3" autoplay loop muted></audio>
+<!-- Music -->
+<audio id="music" src="birthday.mp3" loop muted></audio>
+
+<!-- Overlay for mobile music start -->
+<div id="playOverlay">🎵 Tap anywhere to start the music 🎵</div>
 
 <script>
   // ===== Confetti =====
@@ -136,14 +149,14 @@
   }
   setInterval(createBalloon,700);
 
-  // ===== Floating images drift only (avoid top 150px for countdown) =====
+  // ===== Floating images =====
   const imgs=document.querySelectorAll('.floating-img');
   let W=innerWidth,H=innerHeight;
   addEventListener('resize',()=>{W=innerWidth;H=innerHeight;});
   const movers=[...imgs].map(el=>({
     el,
     x:Math.random()*(W-170),
-    y:150 + Math.random()*(H-150-170),  // reserve top 150px
+    y:150 + Math.random()*(H-150-170),  // avoid overlapping countdown
     dx:(Math.random()*2-1)*1.2,
     dy:(Math.random()*2-1)*1.2
   }));
@@ -151,7 +164,7 @@
     movers.forEach(m=>{
       m.x+=m.dx; m.y+=m.dy;
       if(m.x<0||m.x>W-170) m.dx*=-1;
-      if(m.y<150||m.y>H-170) m.dy*=-1;  // stay below 150px
+      if(m.y<150||m.y>H-170) m.dy*=-1;
       m.el.style.left=m.x+'px';
       m.el.style.top=m.y+'px';
     });
@@ -179,10 +192,18 @@
   }
   setInterval(update,1000);update();
 
-  // ===== Music autoplay =====
+  // ===== Music autoplay mobile-friendly =====
   const audio=document.getElementById('music');
-  audio.play().then(()=>audio.muted=false)
-    .catch(()=>document.addEventListener('click',()=>{audio.muted=false;audio.play();},{once:true}));
+  const overlay=document.getElementById('playOverlay');
+
+  overlay.addEventListener('click', ()=>{
+    audio.muted=false;
+    audio.play();
+    overlay.style.display='none';
+  });
+
+  // Try autoplay silently first for desktop
+  audio.play().catch(()=>{});
 </script>
 </body>
 </html>
