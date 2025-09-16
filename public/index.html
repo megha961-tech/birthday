@@ -64,11 +64,9 @@
     bottom:-150px;
     width:70px; height:90px;
     border-radius:50% 50% 45% 45%;
-    background: radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
-                linear-gradient(45deg,#ff477e,#ff85a1);
     opacity:0.9;
-    animation: floatUp 9s linear infinite;
     z-index:0;
+    cursor: pointer;
   }
   @keyframes floatUp { 0% {transform: translateY(0) scale(1);} 50% {transform: translateY(-50vh) scale(1.1);} 100% {transform: translateY(-110vh) scale(1);} }
 
@@ -105,105 +103,153 @@
 
 <!-- Music -->
 <audio id="music" src="birthday.mp3" loop muted></audio>
+<!-- Balloon pop sound -->
+<audio id="popSound" src="pop.mp3"></audio>
 
 <!-- Overlay for mobile music start -->
 <div id="playOverlay">🎵 Tap anywhere to start the music 🎵</div>
 
 <script>
-  // ===== Confetti =====
-  const canvas=document.getElementById('confetti');
-  const ctx=canvas.getContext('2d');
-  function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
-  resizeCanvas();addEventListener('resize',resizeCanvas);
-  const colors=["#ff0a54","#ff477e","#ff85a1","#ffe066","#70d6ff","#6a4c93","#b5ead7"];
-  const pieces=Array.from({length:200},()=>({
-    x:Math.random()*innerWidth,
-    y:Math.random()*innerHeight,
-    size:Math.random()*8+4,
-    color:colors[Math.floor(Math.random()*colors.length)],
-    speed:Math.random()*3+2
-  }));
-  function confetti(){
-    ctx.clearRect(0,0,innerWidth,innerHeight);
-    pieces.forEach(p=>{
-      ctx.fillStyle=p.color;
-      ctx.fillRect(p.x,p.y,p.size,p.size);
-      p.y+=p.speed;
-      if(p.y>innerHeight) p.y=-10;
-    });
-    requestAnimationFrame(confetti);
-  }
-  confetti();
+const colors=["#ff0a54","#ff477e","#ff85a1","#ffe066","#70d6ff","#6a4c93","#b5ead7"];
+const popSound = document.getElementById('popSound');
 
-  // ===== Balloons =====
-  function createBalloon(){
-    const b=document.createElement('div');
-    b.className='balloon';
-    b.style.left=Math.random()*100+'vw';
-    b.style.background=`radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
-       linear-gradient(45deg,${colors[Math.floor(Math.random()*colors.length)]},
-       ${colors[Math.floor(Math.random()*colors.length)]})`;
-    b.style.animationDuration=(7+Math.random()*5)+'s';
-    document.body.appendChild(b);
-    setTimeout(()=>b.remove(),12000);
-  }
-  setInterval(createBalloon,700);
-
-  // ===== Floating images =====
-  const imgs=document.querySelectorAll('.floating-img');
-  let W=innerWidth,H=innerHeight;
-  addEventListener('resize',()=>{W=innerWidth;H=innerHeight;});
-  const movers=[...imgs].map(el=>({
-    el,
-    x:Math.random()*(W-170),
-    y:150 + Math.random()*(H-150-170),  // avoid overlapping countdown
-    dx:(Math.random()*2-1)*1.2,
-    dy:(Math.random()*2-1)*1.2
-  }));
-  function move(){
-    movers.forEach(m=>{
-      m.x+=m.dx; m.y+=m.dy;
-      if(m.x<0||m.x>W-170) m.dx*=-1;
-      if(m.y<150||m.y>H-170) m.dy*=-1;
-      m.el.style.left=m.x+'px';
-      m.el.style.top=m.y+'px';
-    });
-    requestAnimationFrame(move);
-  }
-  move();
-
-  // ===== Countdown =====
-  const greeting=document.getElementById('greeting');
-  const countdown=document.getElementById('countdown');
-  const target=new Date('2025-09-18T00:00:00');
-  function update(){
-    const diff=target-new Date();
-    if(diff<=0){
-      greeting.textContent='🎉 Happy Birthday Husband! 🎂';
-      countdown.textContent='';
-    }else{
-      const d=Math.floor(diff/86400000);
-      const h=Math.floor(diff/3600000%24);
-      const m=Math.floor(diff/60000%60);
-      const s=Math.floor(diff/1000%60);
-      countdown.textContent=`${d}d ${h}h ${m}m ${s}s`;
-      if(diff<60000) countdown.style.animation='shake 0.5s infinite';
-    }
-  }
-  setInterval(update,1000);update();
-
-  // ===== Music autoplay mobile-friendly =====
-  const audio=document.getElementById('music');
-  const overlay=document.getElementById('playOverlay');
-
-  overlay.addEventListener('click', ()=>{
-    audio.muted=false;
-    audio.play();
-    overlay.style.display='none';
+// ===== Confetti =====
+const canvas=document.getElementById('confetti');
+const ctx=canvas.getContext('2d');
+function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resizeCanvas();addEventListener('resize',resizeCanvas);
+const pieces=Array.from({length:200},()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  size:Math.random()*8+4,
+  color:colors[Math.floor(Math.random()*colors.length)],
+  speed:Math.random()*3+2
+}));
+function confetti(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  pieces.forEach(p=>{
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,p.size,p.size);
+    p.y+=p.speed;
+    if(p.y>innerHeight) p.y=-10;
   });
+  requestAnimationFrame(confetti);
+}
+confetti();
 
-  // Try autoplay silently first for desktop
-  audio.play().catch(()=>{});
+// ===== Balloon creation =====
+function createBalloon(){
+  const b=document.createElement('div');
+  b.className='balloon';
+  b.style.left=Math.random()*100+'vw';
+  b.style.background=`radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
+    linear-gradient(45deg,${colors[Math.floor(Math.random()*colors.length)]},${colors[Math.floor(Math.random()*colors.length)]})`;
+  b.style.animation=`floatUp ${(7+Math.random()*5)}s linear forwards`;
+  document.body.appendChild(b);
+
+  b.addEventListener('click', popBalloon);
+  b.addEventListener('touchstart', popBalloon);
+
+  setTimeout(()=>b.remove(),12000);
+}
+
+// ===== Balloon pop + mini confetti + sound =====
+function popBalloon(e){
+  const b=e.target;
+  popSound.currentTime=0;
+  popSound.play();
+
+  const rect=b.getBoundingClientRect();
+  const burstParticles = 15;
+  for(let i=0;i<burstParticles;i++){
+    const p = document.createElement('div');
+    p.style.position='fixed';
+    p.style.width='8px';
+    p.style.height='8px';
+    p.style.borderRadius='50%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.left=rect.left + rect.width/2 + 'px';
+    p.style.top=rect.top + rect.height/2 + 'px';
+    p.style.zIndex='20';
+    document.body.appendChild(p);
+    const angle = Math.random()*2*Math.PI;
+    const speed = Math.random()*5+2;
+    const vx = Math.cos(angle)*speed;
+    const vy = Math.sin(angle)*speed;
+    let life = 30;
+    const moveParticle = ()=>{
+      if(life-- <=0){p.remove(); return;}
+      const currentLeft = parseFloat(p.style.left);
+      const currentTop = parseFloat(p.style.top);
+      p.style.left = currentLeft + vx + 'px';
+      p.style.top = currentTop + vy + 'px';
+      requestAnimationFrame(moveParticle);
+    };
+    moveParticle();
+  }
+
+  b.style.transition='transform 0.3s ease, opacity 0.3s ease';
+  b.style.transform='scale(0) rotate(45deg)';
+  b.style.opacity='0';
+  b.removeEventListener('click', popBalloon);
+  b.removeEventListener('touchstart', popBalloon);
+  setTimeout(()=>b.remove(),300);
+}
+
+setInterval(createBalloon,700);
+
+// ===== Floating images =====
+const imgs=document.querySelectorAll('.floating-img');
+let W=innerWidth,H=innerHeight;
+addEventListener('resize',()=>{W=innerWidth;H=innerHeight;});
+const movers=[...imgs].map(el=>({
+  el,
+  x:Math.random()*(W-170),
+  y:150 + Math.random()*(H-150-170),
+  dx:(Math.random()*2-1)*1.2,
+  dy:(Math.random()*2-1)*1.2
+}));
+function move(){
+  movers.forEach(m=>{
+    m.x+=m.dx; m.y+=m.dy;
+    if(m.x<0||m.x>W-170) m.dx*=-1;
+    if(m.y<150||m.y>H-170) m.dy*=-1;
+    m.el.style.left=m.x+'px';
+    m.el.style.top=m.y+'px';
+  });
+  requestAnimationFrame(move);
+}
+move();
+
+// ===== Countdown =====
+const greeting=document.getElementById('greeting');
+const countdown=document.getElementById('countdown');
+const target=new Date('2025-09-18T00:00:00');
+function update(){
+  const diff=target-new Date();
+  if(diff<=0){
+    greeting.textContent='🎉 Happy Birthday Husband! 🎂';
+    countdown.textContent='';
+  }else{
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor(diff/3600000%24);
+    const m=Math.floor(diff/60000%60);
+    const s=Math.floor(diff/1000%60);
+    countdown.textContent=`${d}d ${h}h ${m}m ${s}s`;
+    if(diff<60000) countdown.style.animation='shake 0.5s infinite';
+  }
+}
+setInterval(update,1000);update();
+
+// ===== Music autoplay mobile-friendly =====
+const audio=document.getElementById('music');
+const overlay=document.getElementById('playOverlay');
+overlay.addEventListener('click', ()=>{
+  audio.muted=false;
+  audio.play();
+  overlay.style.display='none';
+});
+audio.play().catch(()=>{});
 </script>
 </body>
 </html>
