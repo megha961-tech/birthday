@@ -1,212 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Happy Birthday</title>
-  <style>
-    body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      margin: 0;
-      text-align: center;
-      overflow: hidden;
-      background: radial-gradient(circle at center, #ffb6c1, #ff5cad, #5d26c1);
-      animation: bgPulse 10s ease-in-out infinite;
-    }
-    @keyframes bgPulse {
-      0%,100% {background: radial-gradient(circle at center, #ffb6c1, #ff5cad, #5d26c1);}
-      50% {background: radial-gradient(circle at center, #ffe066, #ff0a54, #6a4c93);}
-    }
+<meta charset="UTF-8" />
+<title>Happy Birthday</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin: 0;
+    text-align: center;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #ffb6c1, #ff5cad, #5d26c1);
+    animation: bgPulse 10s ease-in-out infinite;
+  }
+  @keyframes bgPulse {
+    0%,100% {background: radial-gradient(circle at center, #ffb6c1, #ff5cad, #5d26c1);}
+    50% {background: radial-gradient(circle at center, #ffe066, #ff0a54, #6a4c93);}
+  }
 
-    h1 {
-      margin-top: 30px;
-      font-size: 3.5rem;
-      background: linear-gradient(90deg,#ff0a54,#ff477e,#ff85a1,#ffe066,#70d6ff,#b5ead7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-      animation: hueRotate 8s linear infinite;
-      position: relative;
-      z-index: 5;
-    }
-    @keyframes hueRotate {
-      0% {filter:hue-rotate(0);}
-      100% {filter:hue-rotate(360deg);}
-    }
+  h1 {
+    margin-top: 30px;
+    font-size: 3.5rem;
+    background: linear-gradient(90deg,#ff0a54,#ff477e,#ff85a1,#ffe066,#70d6ff,#b5ead7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    animation: hueRotate 8s linear infinite;
+    position: relative;
+    z-index: 5;
+  }
+  @keyframes hueRotate { 0% {filter:hue-rotate(0);} 100% {filter:hue-rotate(360deg);} }
 
-    #countdown {
-      font-size: 2.8rem;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 10px #000;
-      margin-top: 5px;
-      display: inline-block;
-      animation: pulse 1.2s infinite;
-    }
-    @keyframes pulse {
-      0% {transform: scale(1);}
-      50% {transform: scale(1.05);}
-      100% {transform: scale(1);}
-    }
+  #countdown {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px #000;
+    margin-top: 5px;
+    display: inline-block;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
-    /* >>> fixed here <<< */
-    .floating-img {
-      position: absolute;
-      width: 170px;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 20px;
-      border: 3px solid white;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease;
-      animation: softScale 6s ease-in-out infinite alternate;
-    }
-    @keyframes softScale {
-      from {transform: scale(1);}
-      to   {transform: scale(1.07);}
-    }
+  .floating-img {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 3px solid white;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: transform 0.4s ease;
+    animation: softScale 6s ease-in-out infinite alternate;
+  }
+  @keyframes softScale { from {transform: scale(1);} to {transform: scale(1.07);} }
 
-    audio {display:none;}
-    canvas#confetti {
-      position: fixed; top:0; left:0;
-      width:100%; height:100%;
-      pointer-events:none;
-      z-index:1;
-    }
+  audio {display:none;}
+  canvas#confetti {
+    position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
+  }
 
-    .balloon {
-      position: fixed;
-      bottom:-150px;
-      width:70px;
-      height:90px;
-      border-radius:50% 50% 45% 45%;
-      background: radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
-                  linear-gradient(45deg,#ff477e,#ff85a1);
-      opacity:0.9;
-      animation: floatUp 9s linear infinite;
-      z-index:0;
-    }
-    @keyframes floatUp {
-      0% {transform: translateY(0) scale(1);}
-      50% {transform: translateY(-50vh) scale(1.1);}
-      100% {transform: translateY(-110vh) scale(1);}
-    }
-    @keyframes shake {
-      0%{transform:translateX(0);}
-      25%{transform:translateX(-4px);}
-      50%{transform:translateX(4px);}
-      75%{transform:translateX(-4px);}
-      100%{transform:translateX(0);}
-    }
-  </style>
+  .balloon {
+    position: fixed;
+    bottom:-150px;
+    width:70px; height:90px;
+    border-radius:50% 50% 45% 45%;
+    background: radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
+                linear-gradient(45deg,#ff477e,#ff85a1);
+    opacity:0.9;
+    animation: floatUp 9s linear infinite;
+    z-index:0;
+  }
+  @keyframes floatUp { 0% {transform: translateY(0) scale(1);} 50% {transform: translateY(-50vh) scale(1.1);} 100% {transform: translateY(-110vh) scale(1);} }
+
+  @keyframes shake { 0%{transform:translateX(0);} 25%{transform:translateX(-4px);} 50%{transform:translateX(4px);} 75%{transform:translateX(-4px);} 100%{transform:translateX(0);} }
+</style>
 </head>
 <body>
-  <canvas id="confetti"></canvas>
-  <h1 id="greeting">🎉 Tick-tock! The cake is almost ready… 🎂</h1>
-  <div id="countdown"></div>
+<canvas id="confetti"></canvas>
+<h1 id="greeting">🎉 Tick-tock! The cake is almost ready… 🎂</h1>
+<div id="countdown"></div>
 
-  <!-- Floating images -->
-  <img src="birthday1.jpg" class="floating-img">
-  <img src="birthday2.jpg" class="floating-img">
-  <img src="birthday3.jpg" class="floating-img">
-  <img src="birthday4.jpg" class="floating-img">
-  <img src="birthday5.jpg" class="floating-img">
-  <img src="birthday6.jpg" class="floating-img">
-  <img src="birthday7.jpg" class="floating-img">
-  <img src="birthday8.jpg" class="floating-img">
-  <img src="birthday9.jpg" class="floating-img">  
-  <img src="birthday10.jpg" class="floating-img">
-  <img src="birthday11.jpg" class="floating-img">
-  <img src="birthday12.jpg" class="floating-img">
+<!-- Floating images -->
+<img src="birthday1.jpg" class="floating-img">
+<img src="birthday2.jpg" class="floating-img">
+<img src="birthday3.jpg" class="floating-img">
+<img src="birthday4.jpg" class="floating-img">
+<img src="birthday5.jpg" class="floating-img">
+<img src="birthday6.jpg" class="floating-img">
+<img src="birthday7.jpg" class="floating-img">
+<img src="birthday8.jpg" class="floating-img">
+<img src="birthday9.jpg" class="floating-img">
+<img src="birthday10.jpg" class="floating-img">
+<img src="birthday11.jpg" class="floating-img"> 
+<img src="birthday12.jpg" class="floating-img">
 
-  <audio id="music" src="birthday.mp3" autoplay loop muted></audio>
+<audio id="music" src="birthday.mp3" autoplay loop muted></audio>
 
-  <script>
-    // ===== Confetti =====
-    const canvas=document.getElementById('confetti');
-    const ctx=canvas.getContext('2d');
-    function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
-    resizeCanvas();addEventListener('resize',resizeCanvas);
-    const colors=["#ff0a54","#ff477e","#ff85a1","#ffe066","#70d6ff","#6a4c93","#b5ead7"];
-    const pieces=Array.from({length:200},()=>({
-      x:Math.random()*innerWidth,
-      y:Math.random()*innerHeight,
-      size:Math.random()*8+4,
-      color:colors[Math.floor(Math.random()*colors.length)],
-      speed:Math.random()*3+2
-    }));
-    function confetti(){
-      ctx.clearRect(0,0,innerWidth,innerHeight);
-      pieces.forEach(p=>{
-        ctx.fillStyle=p.color;
-        ctx.fillRect(p.x,p.y,p.size,p.size);
-        p.y+=p.speed;
-        if(p.y>innerHeight) p.y=-10;
-      });
-      requestAnimationFrame(confetti);
+<script>
+  // ===== Confetti =====
+  const canvas=document.getElementById('confetti');
+  const ctx=canvas.getContext('2d');
+  function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
+  resizeCanvas();addEventListener('resize',resizeCanvas);
+  const colors=["#ff0a54","#ff477e","#ff85a1","#ffe066","#70d6ff","#6a4c93","#b5ead7"];
+  const pieces=Array.from({length:200},()=>({
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    size:Math.random()*8+4,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    speed:Math.random()*3+2
+  }));
+  function confetti(){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    pieces.forEach(p=>{
+      ctx.fillStyle=p.color;
+      ctx.fillRect(p.x,p.y,p.size,p.size);
+      p.y+=p.speed;
+      if(p.y>innerHeight) p.y=-10;
+    });
+    requestAnimationFrame(confetti);
+  }
+  confetti();
+
+  // ===== Balloons =====
+  function createBalloon(){
+    const b=document.createElement('div');
+    b.className='balloon';
+    b.style.left=Math.random()*100+'vw';
+    b.style.background=`radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
+       linear-gradient(45deg,${colors[Math.floor(Math.random()*colors.length)]},
+       ${colors[Math.floor(Math.random()*colors.length)]})`;
+    b.style.animationDuration=(7+Math.random()*5)+'s';
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),12000);
+  }
+  setInterval(createBalloon,700);
+
+  // ===== Floating images drift only (avoid top 150px for countdown) =====
+  const imgs=document.querySelectorAll('.floating-img');
+  let W=innerWidth,H=innerHeight;
+  addEventListener('resize',()=>{W=innerWidth;H=innerHeight;});
+  const movers=[...imgs].map(el=>({
+    el,
+    x:Math.random()*(W-170),
+    y:150 + Math.random()*(H-150-170),  // reserve top 150px
+    dx:(Math.random()*2-1)*1.2,
+    dy:(Math.random()*2-1)*1.2
+  }));
+  function move(){
+    movers.forEach(m=>{
+      m.x+=m.dx; m.y+=m.dy;
+      if(m.x<0||m.x>W-170) m.dx*=-1;
+      if(m.y<150||m.y>H-170) m.dy*=-1;  // stay below 150px
+      m.el.style.left=m.x+'px';
+      m.el.style.top=m.y+'px';
+    });
+    requestAnimationFrame(move);
+  }
+  move();
+
+  // ===== Countdown =====
+  const greeting=document.getElementById('greeting');
+  const countdown=document.getElementById('countdown');
+  const target=new Date('2025-09-18T00:00:00');
+  function update(){
+    const diff=target-new Date();
+    if(diff<=0){
+      greeting.textContent='🎉 Happy Birthday Husband! 🎂';
+      countdown.textContent='';
+    }else{
+      const d=Math.floor(diff/86400000);
+      const h=Math.floor(diff/3600000%24);
+      const m=Math.floor(diff/60000%60);
+      const s=Math.floor(diff/1000%60);
+      countdown.textContent=`${d}d ${h}h ${m}m ${s}s`;
+      if(diff<60000) countdown.style.animation='shake 0.5s infinite';
     }
-    confetti();
+  }
+  setInterval(update,1000);update();
 
-    // ===== Balloons =====
-    function createBalloon(){
-      const b=document.createElement('div');
-      b.className='balloon';
-      b.style.left=Math.random()*100+'vw';
-      b.style.background=`radial-gradient(circle at 30% 30%,rgba(255,255,255,0.6),transparent),
-         linear-gradient(45deg,${colors[Math.floor(Math.random()*colors.length)]},
-         ${colors[Math.floor(Math.random()*colors.length)]})`;
-      b.style.animationDuration=(7+Math.random()*5)+'s';
-      document.body.appendChild(b);
-      setTimeout(()=>b.remove(),12000);
-    }
-    setInterval(createBalloon,700);
-
-    // ===== Floating images drift only =====
-    const imgs=document.querySelectorAll('.floating-img');
-    let W=innerWidth,H=innerHeight;
-    addEventListener('resize',()=>{W=innerWidth;H=innerHeight;});
-    const movers=[...imgs].map(el=>({
-      el,
-      x:Math.random()*(W-170),
-      y:Math.random()*(H-170),
-      dx:(Math.random()*2-1)*1.2,
-      dy:(Math.random()*2-1)*1.2
-    }));
-    function move(){
-      movers.forEach(m=>{
-        m.x+=m.dx; m.y+=m.dy;
-        if(m.x<0||m.x>W-170) m.dx*=-1;
-        if(m.y<0||m.y>H-170) m.dy*=-1;
-        m.el.style.left=m.x+'px';
-        m.el.style.top=m.y+'px';
-      });
-      requestAnimationFrame(move);
-    }
-    move();
-
-    // ===== Countdown =====
-    const greeting=document.getElementById('greeting');
-    const countdown=document.getElementById('countdown');
-    const target=new Date('2025-09-18T00:00:00');
-    function update(){
-      const diff=target-new Date();
-      if(diff<=0){
-        greeting.textContent='🎉 Happy Birthday Husband! 🎂';
-        countdown.textContent='';
-      }else{
-        const d=Math.floor(diff/86400000);
-        const h=Math.floor(diff/3600000%24);
-        const m=Math.floor(diff/60000%60);
-        const s=Math.floor(diff/1000%60);
-        countdown.textContent=`${d}d ${h}h ${m}m ${s}s`;
-        if(diff<60000) countdown.style.animation='shake 0.5s infinite';
-      }
-    }
-    setInterval(update,1000);update();
-
-    // ===== Music autoplay =====
-    const audio=document.getElementById('music');
-    audio.play().then(()=>audio.muted=false)
-      .catch(()=>document.addEventListener('click',()=>{audio.muted=false;audio.play();},{once:true}));
-  </script>
+  // ===== Music autoplay =====
+  const audio=document.getElementById('music');
+  audio.play().then(()=>audio.muted=false)
+    .catch(()=>document.addEventListener('click',()=>{audio.muted=false;audio.play();},{once:true}));
+</script>
 </body>
 </html>
